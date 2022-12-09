@@ -1,11 +1,11 @@
-package com.raf.usermanagementbackend.responses;
+package com.raf.usermanagementbackend.dto.login;
 
 
-public class LoginResponse {
+public class LoginResponseDto {
 
     private String jwt;
 
-    public LoginResponse(String jwt) {
+    public LoginResponseDto(String jwt) {
         this.jwt = jwt;
     }
 

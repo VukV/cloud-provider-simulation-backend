@@ -1,7 +1,7 @@
 package com.raf.usermanagementbackend.controllers;
 
-import com.raf.usermanagementbackend.requests.LoginRequest;
-import com.raf.usermanagementbackend.responses.LoginResponse;
+import com.raf.usermanagementbackend.dto.login.LoginRequestDto;
+import com.raf.usermanagementbackend.dto.login.LoginResponseDto;
 import com.raf.usermanagementbackend.service.UserService;
 import com.raf.usermanagementbackend.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +25,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto){
         try {
-            //TODO PROVERI EMAIL
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
         } catch (Exception   e){
             e.printStackTrace();
             return ResponseEntity.status(401).build();
         }
 
-        return ResponseEntity.ok(new LoginResponse(jwtUtil.generateToken(loginRequest.getEmail())));
+        return ResponseEntity.ok(new LoginResponseDto(jwtUtil.generateToken(loginRequestDto.getEmail())));
     }
 
 }
