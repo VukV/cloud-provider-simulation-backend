@@ -1,8 +1,14 @@
 package com.raf.usermanagementbackend.dto.login;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class LoginRequestDto {
 
+    @NotNull @NotBlank @NotEmpty
     private String email;
+    @NotNull @NotBlank @NotEmpty
     private String password;
 
     public LoginRequestDto() {

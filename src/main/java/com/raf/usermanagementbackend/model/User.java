@@ -2,9 +2,10 @@ package com.raf.usermanagementbackend.model;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = { @Index(columnList = "email")})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -19,6 +20,14 @@ public class User {
     private String name;
     @Column(nullable = false)
     private String surname;
+
+    //todo proveri cascade
+    @OneToMany
+    private List<Role> roles;
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public Long getUserId() {
         return userId;
@@ -54,5 +63,13 @@ public class User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -24,10 +24,10 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User currentUser = this.userRepository.findByUsername(username);
         if(currentUser == null) {
-            throw new UsernameNotFoundException("User name "+username+" not found");
+            throw new UsernameNotFoundException("User name " + username + " not found");
         }
 
-        //TODO PROVERA ZA MEJL I PRIVILEGIJE
+        //TODO PROSLEDI PRIVILEGIJE
         return new org.springframework.security.core.userdetails.User(currentUser.getEmail(), currentUser.getPassword(), new ArrayList<>());
     }
 }
