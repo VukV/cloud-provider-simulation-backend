@@ -3,11 +3,11 @@ package com.raf.usermanagementbackend.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", indexes = { @Index(columnList = "role")})
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
 
     @Enumerated (EnumType.STRING)

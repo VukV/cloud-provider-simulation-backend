@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name = "users", indexes = { @Index(columnList = "email")})
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(unique = true, nullable = false)
@@ -22,7 +22,7 @@ public class User {
     private String surname;
 
     //todo proveri cascade
-    @OneToMany
+    @ManyToMany
     private List<Role> roles;
 
     public void setUserId(Long userId) {
