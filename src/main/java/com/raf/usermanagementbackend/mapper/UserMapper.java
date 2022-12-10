@@ -1,6 +1,6 @@
 package com.raf.usermanagementbackend.mapper;
 
-import com.raf.usermanagementbackend.dto.UserDto;
+import com.raf.usermanagementbackend.dto.user.UserDto;
 import com.raf.usermanagementbackend.model.User;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.raf.usermanagementbackend.controllers;
 
-import com.raf.usermanagementbackend.dto.ErrorMessageDto;
+import com.raf.usermanagementbackend.dto.MessageDto;
 import com.raf.usermanagementbackend.dto.login.LoginRequestDto;
 import com.raf.usermanagementbackend.dto.login.LoginResponseDto;
 import com.raf.usermanagementbackend.service.UserService;
@@ -33,7 +33,7 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
         } catch (Exception   e){
             e.printStackTrace();
-            return ResponseEntity.status(401).body(new ErrorMessageDto("Invalid login parameters."));
+            return ResponseEntity.status(401).body(new MessageDto("Invalid login parameters."));
         }
 
         //todo dohvati usera i privilegije?

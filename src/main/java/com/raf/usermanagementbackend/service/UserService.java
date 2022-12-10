@@ -1,6 +1,6 @@
 package com.raf.usermanagementbackend.service;
 
-import com.raf.usermanagementbackend.dto.UserDto;
+import com.raf.usermanagementbackend.dto.user.UserDto;
 import com.raf.usermanagementbackend.mapper.UserMapper;
 import com.raf.usermanagementbackend.model.User;
 import com.raf.usermanagementbackend.repository.UserRepository;
@@ -47,5 +47,13 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUserId(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
         return userMapper.userToUserDto(user);
+    }
+
+    public boolean deleteUserById(Long userId){
+        if (userRepository.existsById(userId)){
+            userRepository.deleteByUserId(userId);
+            return true;
+        }
+        return false;
     }
 }

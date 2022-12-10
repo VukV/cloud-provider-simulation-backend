@@ -1,4 +1,4 @@
-package com.raf.usermanagementbackend.dto;
+package com.raf.usermanagementbackend.dto.user;
 
 import com.raf.usermanagementbackend.model.Role;
 

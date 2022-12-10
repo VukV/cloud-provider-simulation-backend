@@ -1,10 +1,10 @@
 package com.raf.usermanagementbackend.dto;
 
-public class ErrorMessageDto {
+public class MessageDto {
 
     private String message;
 
-    public ErrorMessageDto(String message) {
+    public MessageDto(String message) {
         this.message = message;
     }
 

@@ -1,5 +1,7 @@
 package com.raf.usermanagementbackend.dto.login;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +13,7 @@ public class LoginRequestDto {
     @Email
     private String email;
     @NotNull @NotBlank @NotEmpty
+    @Length(min = 4, max = 20)
     private String password;
 
     public LoginRequestDto() {
