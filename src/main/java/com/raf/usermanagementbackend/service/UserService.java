@@ -57,6 +57,7 @@ public class UserService implements UserDetailsService {
         return userMapper.userToUserDto(user);
     }
 
+    @Transactional
     public boolean deleteUserById(Long userId){
         if (userRepository.existsById(userId)){
             userRepository.deleteByUserId(userId);
