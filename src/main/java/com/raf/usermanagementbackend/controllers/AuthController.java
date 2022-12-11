@@ -3,14 +3,18 @@ package com.raf.usermanagementbackend.controllers;
 import com.raf.usermanagementbackend.dto.MessageDto;
 import com.raf.usermanagementbackend.dto.login.LoginRequestDto;
 import com.raf.usermanagementbackend.dto.login.LoginResponseDto;
+import com.raf.usermanagementbackend.model.Role;
+import com.raf.usermanagementbackend.model.User;
 import com.raf.usermanagementbackend.service.UserService;
 import com.raf.usermanagementbackend.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -36,8 +40,11 @@ public class AuthController {
             return ResponseEntity.status(401).body(new MessageDto("Invalid login parameters."));
         }
 
-        //todo dohvati usera i privilegije?
-        return ResponseEntity.ok(new LoginResponseDto(jwtUtil.generateToken(loginRequestDto.getEmail())));
+        User user = userService.getUserByEmail(loginRequestDto.getEmail());
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getUserId());
+        claims.put("roles", user.getRoles().stream().map(Role::getRole).collect(Collectors.toList()));
+        return ResponseEntity.ok(new LoginResponseDto(jwtUtil.generateToken(loginRequestDto.getEmail(), claims)));
     }
 
 }

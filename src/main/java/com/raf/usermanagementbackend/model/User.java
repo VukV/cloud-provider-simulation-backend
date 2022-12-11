@@ -1,6 +1,5 @@
 package com.raf.usermanagementbackend.model;
 
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private String surname;
 
-    //todo proveri cascade
+    //cascade?
     @ManyToMany
     private List<Role> roles;
 

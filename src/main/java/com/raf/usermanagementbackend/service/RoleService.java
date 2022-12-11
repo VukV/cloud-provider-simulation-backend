@@ -3,7 +3,6 @@ package com.raf.usermanagementbackend.service;
 import com.raf.usermanagementbackend.model.Role;
 import com.raf.usermanagementbackend.repository.RoleRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

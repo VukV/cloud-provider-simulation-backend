@@ -5,9 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -26,8 +24,7 @@ public class JwtUtil {
         return extractAllClaims(token).getExpiration().before(new Date());
     }
 
-    public String generateToken(String email){
-        Map<String, Object> claims = new HashMap<>();
+    public String generateToken(String email, Map<String, Object> claims){
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(email)

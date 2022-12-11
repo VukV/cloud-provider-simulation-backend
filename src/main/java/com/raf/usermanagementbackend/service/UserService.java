@@ -4,31 +4,27 @@ import com.raf.usermanagementbackend.dto.user.UserCreateDto;
 import com.raf.usermanagementbackend.dto.user.UserDto;
 import com.raf.usermanagementbackend.dto.user.UserUpdateDto;
 import com.raf.usermanagementbackend.mapper.UserMapper;
-import com.raf.usermanagementbackend.model.Role;
 import com.raf.usermanagementbackend.model.User;
 import com.raf.usermanagementbackend.repository.RoleRepository;
 import com.raf.usermanagementbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    private UserRepository userRepository;
-    private UserMapper userMapper;
-    private RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, UserMapper userMapper, RoleRepository roleRepository) {
@@ -44,12 +40,15 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User with email " + email + " not found");
         }
 
-        //TODO PROSLEDI PRIVILEGIJE
-        return new org.springframework.security.core.userdetails.User(currentUser.getEmail(), currentUser.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(currentUser.getEmail(), currentUser.getPassword(), currentUser.getRoles());
     }
 
     public List<UserDto> getAllUsers(){
         return userRepository.findAll().stream().map(userMapper :: userToUserDto).collect(Collectors.toList());
+    }
+
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 
     public UserDto getUserById(Long userId){

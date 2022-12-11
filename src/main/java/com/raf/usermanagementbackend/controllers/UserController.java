@@ -4,11 +4,9 @@ import com.raf.usermanagementbackend.dto.MessageDto;
 import com.raf.usermanagementbackend.dto.user.UserCreateDto;
 import com.raf.usermanagementbackend.dto.user.UserDto;
 import com.raf.usermanagementbackend.dto.user.UserUpdateDto;
-import com.raf.usermanagementbackend.model.User;
 import com.raf.usermanagementbackend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.raf.usermanagementbackend.dto.user;
 
 import com.raf.usermanagementbackend.model.Role;
-
 import java.util.List;
 
 public class UserDto {
