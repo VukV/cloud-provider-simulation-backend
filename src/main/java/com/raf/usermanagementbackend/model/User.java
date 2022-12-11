@@ -21,7 +21,7 @@ public class User {
     private String surname;
 
     //cascade?
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Role> roles;
 
     public void setUserId(Long userId) {
