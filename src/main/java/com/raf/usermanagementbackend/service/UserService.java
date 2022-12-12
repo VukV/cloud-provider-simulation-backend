@@ -52,6 +52,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public UserDto getUserById(Long userId){
         User user = userRepository.findByUserId(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));

@@ -29,6 +29,12 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/{userId}")
+    @CheckRole(roles = {RoleEnum.CAN_CREATE_USERS, RoleEnum.CAN_UPDATE_USERS, RoleEnum.CAN_DELETE_USERS})
+    public UserDto getUserById(@PathVariable("userId") Long userId){
+        return userService.getUserById(userId);
+    }
+
     @DeleteMapping("/{userId}")
     @CheckRole(roles = RoleEnum.CAN_DELETE_USERS)
     public ResponseEntity<?> deleteUserById(@PathVariable("userId") Long userId){
