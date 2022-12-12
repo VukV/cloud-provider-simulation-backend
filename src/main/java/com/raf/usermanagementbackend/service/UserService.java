@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserDto> getAllUsers(){
-        return userRepository.findAll().stream().map(userMapper :: userToUserDto).collect(Collectors.toList());
+        return userRepository.findAllUsers().stream().map(userMapper :: userToUserDto).collect(Collectors.toList());
     }
 
     public User getUserByEmail(String email){
