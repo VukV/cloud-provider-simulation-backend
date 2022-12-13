@@ -1,7 +1,11 @@
 package com.raf.usermanagementbackend.controllers;
 
 import com.raf.usermanagementbackend.model.Role;
+import com.raf.usermanagementbackend.model.RoleEnum;
+import com.raf.usermanagementbackend.security.CheckRole;
 import com.raf.usermanagementbackend.service.RoleService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +24,8 @@ public class RoleController {
     }
 
     @GetMapping
-    public List<Role> getAllRoles(){
-        return roleService.getAllRoles();
+    @CheckRole(roles = RoleEnum.CAN_CREATE_USERS)
+    public ResponseEntity<?> getAllRoles(){
+        return new ResponseEntity<List<Role>>(roleService.getAllRoles(), HttpStatus.OK);
     }
 }
