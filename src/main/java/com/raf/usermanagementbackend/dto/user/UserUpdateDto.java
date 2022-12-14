@@ -8,7 +8,7 @@ import java.util.List;
 
 public class UserUpdateDto {
 
-    @NotNull @NotBlank @NotEmpty
+    @NotNull
     private Long userId;
     @Email
     @NotNull @NotBlank @NotEmpty
