@@ -31,8 +31,14 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @CheckRole(roles = {RoleEnum.CREATE, RoleEnum.UPDATE, RoleEnum.DELETE})
-    public UserDto getUserById(@PathVariable("userId") Long userId){
-        return userService.getUserById(userId);
+    public ResponseEntity<?> getUserById(@PathVariable("userId") Long userId){
+        UserDto userDto = userService.getUserById(userId);
+        if(userDto != null){
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        }
+        else {
+            return ResponseEntity.status(404).body(new MessageDto("User not found."));
+        }
     }
 
     @DeleteMapping("/{userId}")

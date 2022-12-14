@@ -54,9 +54,11 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserDto getUserById(Long userId){
-        User user = userRepository.findByUserId(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
-        return userMapper.userToUserDto(user);
+        User user = userRepository.findByUserId(userId).orElse(null);
+        if(user != null){
+            return userMapper.userToUserDto(user);
+        }
+        else return null;
     }
 
     @Transactional
