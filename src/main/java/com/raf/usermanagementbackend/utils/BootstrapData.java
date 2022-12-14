@@ -56,7 +56,7 @@ public class BootstrapData implements CommandLineRunner {
         userRead.setSurname("Read");
         userRead.setEmail("read@raf.rs");
         userRead.setPassword(passwordEncoder.encode("read123"));
-        roleRepository.findByRole(RoleEnum.CAN_READ_USERS).ifPresent(roleRead -> userRead.setRoles(List.of(roleRead)));
+        roleRepository.findByRole(RoleEnum.READ).ifPresent(roleRead -> userRead.setRoles(List.of(roleRead)));
 
         userRepository.save(userRead);
 
@@ -65,7 +65,7 @@ public class BootstrapData implements CommandLineRunner {
         userCreate.setSurname("Create");
         userCreate.setEmail("create@raf.rs");
         userCreate.setPassword(passwordEncoder.encode("create123"));
-        roleRepository.findByRole(RoleEnum.CAN_CREATE_USERS).ifPresent(roleCreate -> userCreate.setRoles(List.of(roleCreate)));
+        roleRepository.findByRole(RoleEnum.CREATE).ifPresent(roleCreate -> userCreate.setRoles(List.of(roleCreate)));
 
         userRepository.save(userCreate);
     }

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
-    @Query("select u from User u left join fetch u.roles")
+    @Query("select distinct u from User u left join fetch u.roles")
     List<User> findAllUsers();
     Optional<User> findByUserId(Long userId);
     void deleteByUserId(Long userId);
