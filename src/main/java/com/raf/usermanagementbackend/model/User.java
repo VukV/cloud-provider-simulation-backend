@@ -6,6 +6,7 @@ import java.util.List;
 @Entity
 @Table(name = "users", indexes = { @Index(columnList = "email")})
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -20,7 +21,6 @@ public class User {
     @Column(nullable = false)
     private String surname;
 
-    //cascade?
     @ManyToMany
     private List<Role> roles;
 
