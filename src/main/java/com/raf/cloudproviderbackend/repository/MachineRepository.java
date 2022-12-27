@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MachineRepository extends JpaRepository<Machine, Long> {
 
-    Machine findMachineByMachineId(Long machineId);
+    Machine findByMachineId(Long machineId);
     @Query("select m from Machine m where m.createdBy.userId = :userId")
     List<Machine> findAllByUserId(Long userId);
     List<Machine> findAllByCreatedByAndNameContains(User user, String machineName);

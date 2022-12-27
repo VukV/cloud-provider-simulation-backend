@@ -56,7 +56,14 @@ public class BootstrapData implements CommandLineRunner {
         userRead.setSurname("Read");
         userRead.setEmail("read@raf.rs");
         userRead.setPassword(passwordEncoder.encode("read123"));
-        roleRepository.findByRole(RoleEnum.READ).ifPresent(roleRead -> userRead.setRoles(List.of(roleRead)));
+        //roleRepository.findByRole(RoleEnum.READ).ifPresent(roleRead -> userRead.setRoles(List.of(roleRead)));
+        List<Role> rolesRead = new ArrayList<>();
+        Role roleRead = roleRepository.findByRole(RoleEnum.READ).orElse(null);
+        Role roleSearchMachines = roleRepository.findByRole(RoleEnum.SEARCH_MACHINES).orElse(null);
+        Role roleStartMachines = roleRepository.findByRole(RoleEnum.START_MACHINES).orElse(null);
+        Role roleStopMachines = roleRepository.findByRole(RoleEnum.STOP_MACHINES).orElse(null);
+        rolesRead.addAll(List.of(roleRead, roleSearchMachines, roleStartMachines, roleStopMachines));
+        userRead.setRoles(rolesRead);
 
         userRepository.save(userRead);
 

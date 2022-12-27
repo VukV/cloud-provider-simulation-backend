@@ -27,8 +27,19 @@ public class Machine {
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SUBSELECT)
     private User createdBy;
+
+    public Machine() {
+    }
+
+    public Machine(MachineStatusEnum machineStatus, boolean active, LocalDateTime createdDate, String name, boolean occupied, User createdBy) {
+        this.machineStatus = machineStatus;
+        this.active = active;
+        this.createdDate = createdDate;
+        this.name = name;
+        this.occupied = occupied;
+        this.createdBy = createdBy;
+    }
 
     public Long getMachineId() {
         return machineId;
