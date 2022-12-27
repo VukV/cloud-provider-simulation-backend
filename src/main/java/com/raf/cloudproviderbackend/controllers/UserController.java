@@ -33,21 +33,14 @@ public class UserController {
     @CheckRole(roles = {RoleEnum.CREATE, RoleEnum.UPDATE, RoleEnum.DELETE})
     public ResponseEntity<?> getUserById(@PathVariable("userId") Long userId){
         UserDto userDto = userService.getUserById(userId);
-        if(userDto != null){
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        }
-        else {
-            return ResponseEntity.status(404).body(new MessageDto("User not found."));
-        }
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
     @CheckRole(roles = RoleEnum.DELETE)
     public ResponseEntity<?> deleteUserById(@PathVariable("userId") Long userId){
-        if(userService.deleteUserById(userId)){
-            return ResponseEntity.ok(new MessageDto("User deleted successfully."));
-        }
-        return ResponseEntity.status(404).body(new MessageDto("User not found."));
+        userService.deleteUserById(userId);
+        return ResponseEntity.ok(new MessageDto("User deleted successfully."));
     }
 
     @PostMapping

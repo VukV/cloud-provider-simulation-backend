@@ -26,6 +26,6 @@ public class RoleController {
     @GetMapping
     @CheckRole(roles = RoleEnum.CREATE)
     public ResponseEntity<?> getAllRoles(){
-        return new ResponseEntity<List<Role>>(roleService.getAllRoles(), HttpStatus.OK);
+        return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
     }
 }

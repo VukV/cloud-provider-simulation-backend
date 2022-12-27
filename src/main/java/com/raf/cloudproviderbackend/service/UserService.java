@@ -3,6 +3,7 @@ package com.raf.cloudproviderbackend.service;
 import com.raf.cloudproviderbackend.dto.user.UserCreateDto;
 import com.raf.cloudproviderbackend.dto.user.UserDto;
 import com.raf.cloudproviderbackend.dto.user.UserUpdateDto;
+import com.raf.cloudproviderbackend.exceptions.UserNotFoundException;
 import com.raf.cloudproviderbackend.mapper.UserMapper;
 import com.raf.cloudproviderbackend.model.User;
 import com.raf.cloudproviderbackend.repository.RoleRepository;
@@ -57,16 +58,15 @@ public class UserService implements UserDetailsService {
         if(user != null){
             return userMapper.userToUserDto(user);
         }
-        else return null;
+        throw new UserNotFoundException();
     }
 
     @Transactional
-    public boolean deleteUserById(Long userId){
+    public void deleteUserById(Long userId){
         if (userRepository.existsById(userId)){
             userRepository.deleteByUserId(userId);
-            return true;
         }
-        return false;
+        throw new UserNotFoundException();
     }
 
     @Transactional
@@ -78,7 +78,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void updateUser(UserUpdateDto userUpdateDto){
-        User user = userRepository.findByUserId(userUpdateDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+        User user = userRepository.findByUserId(userUpdateDto.getUserId()).orElseThrow(UserNotFoundException::new);
         userMapper.updateUser(user, userUpdateDto);
         roleRepository.findRoleByRoleIds(userUpdateDto.getRoleIds()).ifPresent(user::setRoles);
     }
