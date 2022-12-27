@@ -1,5 +1,8 @@
 package com.raf.cloudproviderbackend.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -17,9 +20,14 @@ public class Machine {
     private boolean active;
     @Column(nullable = false)
     private LocalDateTime createdDate;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private boolean occupied;
 
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
     private User createdBy;
 
     public Long getMachineId() {
@@ -60,5 +68,21 @@ public class Machine {
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
     }
 }
