@@ -1,7 +1,6 @@
-package com.raf.cloudproviderbackend.model;
+package com.raf.cloudproviderbackend.model.machine;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.raf.cloudproviderbackend.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -3,7 +3,7 @@ package com.raf.cloudproviderbackend.mapper;
 import com.raf.cloudproviderbackend.dto.user.UserCreateDto;
 import com.raf.cloudproviderbackend.dto.user.UserDto;
 import com.raf.cloudproviderbackend.dto.user.UserUpdateDto;
-import com.raf.cloudproviderbackend.model.User;
+import com.raf.cloudproviderbackend.model.user.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

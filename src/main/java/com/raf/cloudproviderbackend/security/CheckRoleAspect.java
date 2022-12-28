@@ -1,8 +1,8 @@
 package com.raf.cloudproviderbackend.security;
 
 import com.raf.cloudproviderbackend.dto.MessageDto;
-import com.raf.cloudproviderbackend.model.Role;
-import com.raf.cloudproviderbackend.model.RoleEnum;
+import com.raf.cloudproviderbackend.model.user.Role;
+import com.raf.cloudproviderbackend.model.user.RoleEnum;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

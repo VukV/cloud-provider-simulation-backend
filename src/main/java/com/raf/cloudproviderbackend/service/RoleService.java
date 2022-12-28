@@ -1,6 +1,6 @@
 package com.raf.cloudproviderbackend.service;
 
-import com.raf.cloudproviderbackend.model.Role;
+import com.raf.cloudproviderbackend.model.user.Role;
 import com.raf.cloudproviderbackend.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;

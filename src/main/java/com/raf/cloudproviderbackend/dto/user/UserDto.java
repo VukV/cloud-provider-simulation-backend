@@ -1,6 +1,6 @@
 package com.raf.cloudproviderbackend.dto.user;
 
-import com.raf.cloudproviderbackend.model.Role;
+import com.raf.cloudproviderbackend.model.user.Role;
 import java.util.List;
 
 public class UserDto {

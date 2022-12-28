@@ -1,7 +1,7 @@
 package com.raf.cloudproviderbackend.mapper;
 
 import com.raf.cloudproviderbackend.dto.machine.MachineDto;
-import com.raf.cloudproviderbackend.model.Machine;
+import com.raf.cloudproviderbackend.model.machine.Machine;
 import org.springframework.stereotype.Component;
 
 @Component

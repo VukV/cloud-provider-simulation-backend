@@ -1,4 +1,4 @@
-package com.raf.cloudproviderbackend.model;
+package com.raf.cloudproviderbackend.model.user;
 
 import javax.persistence.*;
 import java.util.List;

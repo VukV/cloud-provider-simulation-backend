@@ -1,8 +1,8 @@
 package com.raf.cloudproviderbackend.utils;
 
-import com.raf.cloudproviderbackend.model.Role;
-import com.raf.cloudproviderbackend.model.RoleEnum;
-import com.raf.cloudproviderbackend.model.User;
+import com.raf.cloudproviderbackend.model.user.Role;
+import com.raf.cloudproviderbackend.model.user.RoleEnum;
+import com.raf.cloudproviderbackend.model.user.User;
 import com.raf.cloudproviderbackend.repository.RoleRepository;
 import com.raf.cloudproviderbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

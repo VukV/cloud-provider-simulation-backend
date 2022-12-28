@@ -5,7 +5,7 @@ import com.raf.cloudproviderbackend.dto.user.UserDto;
 import com.raf.cloudproviderbackend.dto.user.UserUpdateDto;
 import com.raf.cloudproviderbackend.exceptions.UserNotFoundException;
 import com.raf.cloudproviderbackend.mapper.UserMapper;
-import com.raf.cloudproviderbackend.model.User;
+import com.raf.cloudproviderbackend.model.user.User;
 import com.raf.cloudproviderbackend.repository.RoleRepository;
 import com.raf.cloudproviderbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;

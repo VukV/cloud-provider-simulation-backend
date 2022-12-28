@@ -1,6 +1,6 @@
 package com.raf.cloudproviderbackend.dto.machine;
 
-import com.raf.cloudproviderbackend.model.MachineStatusEnum;
+import com.raf.cloudproviderbackend.model.machine.MachineStatusEnum;
 
 import java.time.LocalDateTime;
 

@@ -1,8 +1,8 @@
 package com.raf.cloudproviderbackend.repository;
 
-import com.raf.cloudproviderbackend.model.Machine;
-import com.raf.cloudproviderbackend.model.MachineStatusEnum;
-import com.raf.cloudproviderbackend.model.User;
+import com.raf.cloudproviderbackend.model.machine.Machine;
+import com.raf.cloudproviderbackend.model.machine.MachineStatusEnum;
+import com.raf.cloudproviderbackend.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

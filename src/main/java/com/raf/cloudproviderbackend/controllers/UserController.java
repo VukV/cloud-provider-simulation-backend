@@ -4,7 +4,7 @@ import com.raf.cloudproviderbackend.dto.MessageDto;
 import com.raf.cloudproviderbackend.dto.user.UserCreateDto;
 import com.raf.cloudproviderbackend.dto.user.UserDto;
 import com.raf.cloudproviderbackend.dto.user.UserUpdateDto;
-import com.raf.cloudproviderbackend.model.RoleEnum;
+import com.raf.cloudproviderbackend.model.user.RoleEnum;
 import com.raf.cloudproviderbackend.security.CheckRole;
 import com.raf.cloudproviderbackend.service.UserService;
 import org.springframework.http.HttpStatus;

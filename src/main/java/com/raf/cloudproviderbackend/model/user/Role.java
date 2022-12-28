@@ -1,4 +1,4 @@
-package com.raf.cloudproviderbackend.model;
+package com.raf.cloudproviderbackend.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
