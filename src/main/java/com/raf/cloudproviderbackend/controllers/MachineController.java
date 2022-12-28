@@ -3,6 +3,7 @@ package com.raf.cloudproviderbackend.controllers;
 import com.raf.cloudproviderbackend.dto.machine.MachineDto;
 import com.raf.cloudproviderbackend.dto.machine.MachineScheduleDto;
 import com.raf.cloudproviderbackend.model.machine.MachineActionEnum;
+import com.raf.cloudproviderbackend.model.machine.MachineStatusEnum;
 import com.raf.cloudproviderbackend.model.user.RoleEnum;
 import com.raf.cloudproviderbackend.security.CheckRole;
 import com.raf.cloudproviderbackend.service.MachineService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -21,6 +23,12 @@ public class MachineController {
 
     public MachineController(MachineService machineService) {
         this.machineService = machineService;
+    }
+
+    @GetMapping
+    @CheckRole(roles = RoleEnum.SEARCH_MACHINES)
+    public ResponseEntity<List<MachineDto>> getMachines(@RequestParam(required = false) String machineName, @RequestParam(required = false)List<MachineStatusEnum> statusList, @RequestParam(required = false) Long dateFrom, @RequestParam(required = false) Long dateTo){
+        return ResponseEntity.ok(machineService.getMachines(machineName, statusList, dateFrom, dateTo));
     }
 
     @PostMapping

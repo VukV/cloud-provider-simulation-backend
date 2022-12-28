@@ -2,10 +2,7 @@ package com.raf.cloudproviderbackend.service;
 
 import com.raf.cloudproviderbackend.dto.machine.MachineDto;
 import com.raf.cloudproviderbackend.dto.machine.MachineScheduleDto;
-import com.raf.cloudproviderbackend.exceptions.MachineNotFoundException;
-import com.raf.cloudproviderbackend.exceptions.MachineOccupiedException;
-import com.raf.cloudproviderbackend.exceptions.MachineOwnershipException;
-import com.raf.cloudproviderbackend.exceptions.MachineStatusException;
+import com.raf.cloudproviderbackend.exceptions.*;
 import com.raf.cloudproviderbackend.mapper.MachineMapper;
 import com.raf.cloudproviderbackend.model.machine.*;
 import com.raf.cloudproviderbackend.model.user.User;
@@ -21,6 +18,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MachineService {
@@ -37,6 +35,23 @@ public class MachineService {
         this.machineErrorRepository = machineErrorRepository;
         this.userRepository = userRepository;
         this.machineMapper = machineMapper;
+    }
+
+    public List<MachineDto> getMachines(String machineName, List<MachineStatusEnum> statusList, Long dateFrom, Long dateTo){
+
+        if((dateFrom != null && dateTo == null) || (dateFrom == null && dateTo != null)){
+            throw new SearchDateException();
+        }
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(dateFrom == null && dateTo == null){
+            return machineRepository.findAllMachines(email, machineName, statusList, null, null)
+                    .stream().map(machineMapper :: machineToMachineDto).collect(Collectors.toList());
+        }
+
+        return machineRepository.findAllMachines(email, machineName, statusList, Date.from(Instant.ofEpochSecond(dateFrom)), Date.from(Instant.ofEpochSecond(dateTo)))
+                .stream().map(machineMapper :: machineToMachineDto).collect(Collectors.toList());
     }
 
     @Transactional
@@ -107,7 +122,6 @@ public class MachineService {
     @Scheduled(fixedDelay = 30000)
     @Transactional(dontRollbackOn = {MachineOccupiedException.class, MachineStatusException.class})
     public void executeScheduledTasks(){
-        System.out.println("usao baco");
         List<MachineSchedule> scheduleList = machineScheduleRepository.findAllByScheduledDateBeforeAndSentToExecute(Date.from(Instant.now()), false);
         if(scheduleList.isEmpty()){
             return;
@@ -119,7 +133,6 @@ public class MachineService {
                 checkAndSetMachineOccupied(scheduledTask.getMachine());
 
                 //TODO send to queue
-                System.out.println("usao baco unutri");
                 scheduledTask.setSentToExecute(true);
             }
             catch (MachineOccupiedException moe){
