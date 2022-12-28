@@ -8,7 +8,7 @@ public class MachineDto {
 
     private Long machineId;
     private MachineStatusEnum machineStatus;
-    private LocalDateTime createdDate;
+    private Long createdDate;
     private String name;
 
     public Long getMachineId() {
@@ -27,11 +27,11 @@ public class MachineDto {
         this.machineStatus = machineStatus;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public Long getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(Long createdDate) {
         this.createdDate = createdDate;
     }
 

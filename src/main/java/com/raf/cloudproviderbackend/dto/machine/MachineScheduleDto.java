@@ -6,15 +6,14 @@ import org.hibernate.annotations.Type;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 public class MachineScheduleDto {
 
     @NotNull
     private Long machineId;
-    @NotNull @NotBlank @NotEmpty
+    @NotNull
     @Type(type = "timestamp")
-    private Date scheduleDate;
+    private Long scheduleDate;
 
     public Long getMachineId() {
         return machineId;
@@ -24,11 +23,11 @@ public class MachineScheduleDto {
         this.machineId = machineId;
     }
 
-    public Date getScheduleDate() {
+    public Long getScheduleDate() {
         return scheduleDate;
     }
 
-    public void setScheduleDate(Date scheduleDate) {
+    public void setScheduleDate(Long scheduleDate) {
         this.scheduleDate = scheduleDate;
     }
 }

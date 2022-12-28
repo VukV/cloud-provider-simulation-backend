@@ -13,7 +13,7 @@ public class MachineMapper {
         machineDto.setMachineId(machine.getMachineId());
         machineDto.setMachineStatus(machine.getMachineStatus());
         machineDto.setName(machine.getName());
-        machineDto.setCreatedDate(machine.getCreatedDate());
+        machineDto.setCreatedDate(machine.getCreatedDate().toInstant().getEpochSecond());
 
         return machineDto;
     }

@@ -1,7 +1,7 @@
 package com.raf.cloudproviderbackend.model.machine;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "machine_schedules")
@@ -11,14 +11,25 @@ public class MachineSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long machineScheduleId;
     @Column(nullable = false)
-    private LocalDateTime scheduledDate;
+    private Date scheduledDate;
     @Column(nullable = false)
     private MachineActionEnum action;
+    @Column(nullable = false)
+    private boolean sentToExecute;
 
     @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Machine machine;
 
+    public MachineSchedule() {
+    }
+
+    public MachineSchedule(Date scheduledDate, MachineActionEnum action, Machine machine, boolean sentToExecute) {
+        this.scheduledDate = scheduledDate;
+        this.action = action;
+        this.machine = machine;
+        this.sentToExecute = sentToExecute;
+    }
 
     public Long getMachineScheduleId() {
         return machineScheduleId;
@@ -28,11 +39,11 @@ public class MachineSchedule {
         this.machineScheduleId = machineScheduleId;
     }
 
-    public LocalDateTime getScheduledDate() {
+    public Date getScheduledDate() {
         return scheduledDate;
     }
 
-    public void setScheduledDate(LocalDateTime scheduledDate) {
+    public void setScheduledDate(Date scheduledDate) {
         this.scheduledDate = scheduledDate;
     }
 
@@ -50,5 +61,13 @@ public class MachineSchedule {
 
     public void setMachine(Machine machine) {
         this.machine = machine;
+    }
+
+    public boolean isSentToExecute() {
+        return sentToExecute;
+    }
+
+    public void setSentToExecute(boolean completed) {
+        this.sentToExecute = completed;
     }
 }

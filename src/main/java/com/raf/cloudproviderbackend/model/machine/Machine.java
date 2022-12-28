@@ -4,6 +4,7 @@ import com.raf.cloudproviderbackend.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "machines")
@@ -18,7 +19,8 @@ public class Machine {
     @Column(nullable = false)
     private boolean active;
     @Column(nullable = false)
-    private LocalDateTime createdDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -31,7 +33,7 @@ public class Machine {
     public Machine() {
     }
 
-    public Machine(MachineStatusEnum machineStatus, boolean active, LocalDateTime createdDate, String name, boolean occupied, User createdBy) {
+    public Machine(MachineStatusEnum machineStatus, boolean active, Date createdDate, String name, boolean occupied, User createdBy) {
         this.machineStatus = machineStatus;
         this.active = active;
         this.createdDate = createdDate;
@@ -64,11 +66,11 @@ public class Machine {
         this.active = active;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
