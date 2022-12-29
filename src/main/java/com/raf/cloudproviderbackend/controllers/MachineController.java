@@ -3,6 +3,7 @@ package com.raf.cloudproviderbackend.controllers;
 import com.raf.cloudproviderbackend.dto.machine.MachineDto;
 import com.raf.cloudproviderbackend.dto.machine.MachineScheduleDto;
 import com.raf.cloudproviderbackend.model.machine.MachineActionEnum;
+import com.raf.cloudproviderbackend.model.machine.MachineError;
 import com.raf.cloudproviderbackend.model.machine.MachineStatusEnum;
 import com.raf.cloudproviderbackend.model.user.RoleEnum;
 import com.raf.cloudproviderbackend.security.CheckRole;
@@ -84,5 +85,10 @@ public class MachineController {
     public ResponseEntity<?> scheduleRestart(@Valid @RequestBody MachineScheduleDto machineScheduleDto){
         machineService.addScheduledTask(machineScheduleDto, MachineActionEnum.RESTART);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    @GetMapping("/errors")
+    public ResponseEntity<List<MachineError>> getMachineErrors(){
+        return ResponseEntity.ok(machineService.getMachineErrors());
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 public interface MachineErrorRepository extends JpaRepository<MachineError, Long> {
 
     MachineError getByMachineErrorId(Long id);
-    List<MachineError> getAllByMachine_CreatedBy(User user);
+    List<MachineError> getAllByMachine_CreatedBy_Email(String email);
 }

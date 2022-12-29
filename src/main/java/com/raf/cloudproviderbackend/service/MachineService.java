@@ -119,6 +119,11 @@ public class MachineService {
         throw new MachineNotFoundException();
     }
 
+    public List<MachineError> getMachineErrors(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return machineErrorRepository.getAllByMachine_CreatedBy_Email(email);
+    }
+
     @Scheduled(fixedDelay = 30000)
     @Transactional(dontRollbackOn = {MachineOccupiedException.class, MachineStatusException.class})
     public void executeScheduledTasks(){
