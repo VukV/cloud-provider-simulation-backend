@@ -95,8 +95,8 @@ public class MachineService {
 
         if(machine != null){
             checkMachineOwner(machine);
-            checkAndSetMachineOccupied(machine);
             checkActionAndStatus(machineAction, machine.getMachineStatus());
+            checkAndSetMachineOccupied(machine);
 
             //TODO send to queue
             return;
