@@ -1,6 +1,7 @@
 package com.raf.cloudproviderbackend.controllers;
 
 import com.raf.cloudproviderbackend.dto.machine.MachineDto;
+import com.raf.cloudproviderbackend.dto.machine.MachineErrorDto;
 import com.raf.cloudproviderbackend.dto.machine.MachineScheduleDto;
 import com.raf.cloudproviderbackend.model.machine.MachineActionEnum;
 import com.raf.cloudproviderbackend.model.machine.MachineError;
@@ -88,7 +89,7 @@ public class MachineController {
     }
 
     @GetMapping("/errors")
-    public ResponseEntity<List<MachineError>> getMachineErrors(){
+    public ResponseEntity<List<MachineErrorDto>> getMachineErrors(){
         return ResponseEntity.ok(machineService.getMachineErrors());
     }
 }

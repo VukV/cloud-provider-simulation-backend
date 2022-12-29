@@ -1,6 +1,7 @@
 package com.raf.cloudproviderbackend.service;
 
 import com.raf.cloudproviderbackend.dto.machine.MachineDto;
+import com.raf.cloudproviderbackend.dto.machine.MachineErrorDto;
 import com.raf.cloudproviderbackend.dto.machine.MachineScheduleDto;
 import com.raf.cloudproviderbackend.exceptions.*;
 import com.raf.cloudproviderbackend.mapper.MachineMapper;
@@ -119,9 +120,9 @@ public class MachineService {
         throw new MachineNotFoundException();
     }
 
-    public List<MachineError> getMachineErrors(){
+    public List<MachineErrorDto> getMachineErrors(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return machineErrorRepository.getAllByMachine_CreatedBy_Email(email);
+        return machineErrorRepository.getAllByMachine_CreatedBy_Email(email).stream().map(machineMapper::machineErrorToMachineErrorDto).collect(Collectors.toList());
     }
 
     @Scheduled(fixedDelay = 30000)
