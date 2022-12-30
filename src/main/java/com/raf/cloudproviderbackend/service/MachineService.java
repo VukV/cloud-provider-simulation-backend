@@ -2,6 +2,7 @@ package com.raf.cloudproviderbackend.service;
 
 import com.raf.cloudproviderbackend.dto.machine.MachineDto;
 import com.raf.cloudproviderbackend.dto.machine.MachineErrorDto;
+import com.raf.cloudproviderbackend.dto.machine.MachineQueueDto;
 import com.raf.cloudproviderbackend.dto.machine.MachineScheduleDto;
 import com.raf.cloudproviderbackend.exceptions.*;
 import com.raf.cloudproviderbackend.mapper.MachineMapper;
@@ -11,6 +12,7 @@ import com.raf.cloudproviderbackend.repository.MachineErrorRepository;
 import com.raf.cloudproviderbackend.repository.MachineRepository;
 import com.raf.cloudproviderbackend.repository.MachineScheduleRepository;
 import com.raf.cloudproviderbackend.repository.UserRepository;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,13 +31,15 @@ public class MachineService {
     private final MachineErrorRepository machineErrorRepository;
     private final UserRepository userRepository;
     private final MachineMapper machineMapper;
+    private final AmqpTemplate rabbitTemplate;
 
-    public MachineService(MachineRepository machineRepository, MachineScheduleRepository machineScheduleRepository, MachineErrorRepository machineErrorRepository, UserRepository userRepository, MachineMapper machineMapper) {
+    public MachineService(MachineRepository machineRepository, MachineScheduleRepository machineScheduleRepository, MachineErrorRepository machineErrorRepository, UserRepository userRepository, MachineMapper machineMapper, AmqpTemplate rabbitTemplate) {
         this.machineRepository = machineRepository;
         this.machineScheduleRepository = machineScheduleRepository;
         this.machineErrorRepository = machineErrorRepository;
         this.userRepository = userRepository;
         this.machineMapper = machineMapper;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public List<MachineDto> getMachines(String machineName, List<MachineStatusEnum> statusList, Long dateFrom, Long dateTo){
@@ -98,7 +102,7 @@ public class MachineService {
             checkActionAndStatus(machineAction, machine.getMachineStatus());
             checkAndSetMachineOccupied(machine);
 
-            //TODO send to queue
+            sendToQueue(machineId, machineAction, SecurityContextHolder.getContext().getAuthentication().getName());
             return;
         }
 
@@ -138,7 +142,7 @@ public class MachineService {
                 checkActionAndStatus(scheduledTask.getAction(), scheduledTask.getMachine().getMachineStatus());
                 checkAndSetMachineOccupied(scheduledTask.getMachine());
 
-                //TODO send to queue
+                sendToQueue(scheduledTask.getMachine().getMachineId(), scheduledTask.getAction(), scheduledTask.getMachine().getCreatedBy().getEmail());
                 scheduledTask.setSentToExecute(true);
             }
             catch (MachineOccupiedException moe){
@@ -188,5 +192,10 @@ public class MachineService {
         }
 
         machine.setOccupied(true);
+    }
+
+    private void sendToQueue(Long machineId, MachineActionEnum action, String userEmail){
+        MachineQueueDto machineQueueDto = new MachineQueueDto(machineId, action, userEmail);
+        rabbitTemplate.convertAndSend("machineTaskQueue", machineQueueDto);
     }
 }
