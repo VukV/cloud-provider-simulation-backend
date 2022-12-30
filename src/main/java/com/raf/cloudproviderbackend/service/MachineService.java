@@ -13,6 +13,7 @@ import com.raf.cloudproviderbackend.repository.MachineRepository;
 import com.raf.cloudproviderbackend.repository.MachineScheduleRepository;
 import com.raf.cloudproviderbackend.repository.UserRepository;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -84,8 +85,13 @@ public class MachineService {
         if(machine != null){
             checkMachineOwner(machine);
             if(machine.getMachineStatus() == MachineStatusEnum.STOPPED){
-                machine.setActive(false);
-                return;
+                try {
+                    machine.setActive(false);
+                    return;
+                }
+                catch (ObjectOptimisticLockingFailureException e){
+                    throw new MachineOccupiedException();
+                }
             }
             throw new MachineStatusException("Machine is not stopped.");
         }
@@ -99,8 +105,8 @@ public class MachineService {
 
         if(machine != null){
             checkMachineOwner(machine);
-            checkActionAndStatus(machineAction, machine.getMachineStatus());
             checkAndSetMachineOccupied(machine);
+            checkActionAndStatus(machineAction, machine.getMachineStatus());
 
             sendToQueue(machineId, machineAction, SecurityContextHolder.getContext().getAuthentication().getName());
             return;
@@ -139,8 +145,8 @@ public class MachineService {
 
         for(MachineSchedule scheduledTask: scheduleList){
             try {
-                checkActionAndStatus(scheduledTask.getAction(), scheduledTask.getMachine().getMachineStatus());
                 checkAndSetMachineOccupied(scheduledTask.getMachine());
+                checkActionAndStatus(scheduledTask.getAction(), scheduledTask.getMachine().getMachineStatus());
 
                 sendToQueue(scheduledTask.getMachine().getMachineId(), scheduledTask.getAction(), scheduledTask.getMachine().getCreatedBy().getEmail());
                 scheduledTask.setSentToExecute(true);
@@ -191,7 +197,13 @@ public class MachineService {
             throw new MachineOccupiedException();
         }
 
-        machine.setOccupied(true);
+        try {
+            machine.setOccupied(true);
+        }
+        catch (ObjectOptimisticLockingFailureException e){
+            throw new MachineOccupiedException();
+        }
+
     }
 
     private void sendToQueue(Long machineId, MachineActionEnum action, String userEmail){

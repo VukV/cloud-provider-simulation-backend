@@ -30,6 +30,10 @@ public class Machine {
     @ManyToOne(fetch = FetchType.LAZY)
     private User createdBy;
 
+    @Column
+    @Version
+    private Integer version = 0;
+
     public Machine() {
     }
 
@@ -96,5 +100,13 @@ public class Machine {
 
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
