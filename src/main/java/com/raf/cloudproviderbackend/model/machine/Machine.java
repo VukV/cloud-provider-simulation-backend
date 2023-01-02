@@ -1,6 +1,8 @@
 package com.raf.cloudproviderbackend.model.machine;
 
 import com.raf.cloudproviderbackend.model.user.User;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,7 +29,7 @@ public class Machine {
     private boolean occupied;
 
     @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User createdBy;
 
     @Column

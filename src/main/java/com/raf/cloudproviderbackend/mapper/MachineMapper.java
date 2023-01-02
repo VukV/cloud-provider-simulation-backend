@@ -26,7 +26,7 @@ public class MachineMapper {
         machineErrorDto.setMachineErrorId(machineError.getMachineErrorId());
         machineErrorDto.setErrorDate(machineError.getErrorDate().getTime() / 1000);
         machineErrorDto.setAction(machineError.getAction());
-        machineErrorDto.setMessage(machineErrorDto.getMessage());
+        machineErrorDto.setMessage(machineError.getMessage());
         machineErrorDto.setMachineId(machineError.getMachine().getMachineId());
         machineErrorDto.setMachineName(machineError.getMachine().getName());
 

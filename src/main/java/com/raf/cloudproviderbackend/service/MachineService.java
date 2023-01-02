@@ -103,8 +103,8 @@ public class MachineService {
 
         if(machine != null){
             checkMachineOwner(machine);
-            checkAndSetMachineOccupied(machine);
             checkActionAndStatus(machineAction, machine.getMachineStatus());
+            checkAndSetMachineOccupied(machine);
 
             return;
         }
@@ -154,10 +154,9 @@ public class MachineService {
 
         for(MachineSchedule scheduledTask: scheduleList){
             try {
-                checkAndSetMachineOccupied(scheduledTask.getMachine());
                 checkActionAndStatus(scheduledTask.getAction(), scheduledTask.getMachine().getMachineStatus());
+                checkAndSetMachineOccupied(scheduledTask.getMachine());
 
-                scheduledTask.setSentToExecute(true);
                 tasks.add(new MachineScheduledTaskDto(scheduledTask.getMachine().getMachineId(), scheduledTask.getAction(), scheduledTask.getMachine().getCreatedBy().getEmail()));
             }
             catch (MachineOccupiedException moe){
@@ -165,6 +164,10 @@ public class MachineService {
             }
             catch (MachineStatusException mse){
                 logError(scheduledTask, "Wrong machine action.");
+            }
+            finally {
+                scheduledTask.setSentToExecute(true);
+                machineScheduleRepository.save(scheduledTask);
             }
         }
 
