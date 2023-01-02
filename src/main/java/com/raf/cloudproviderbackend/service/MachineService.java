@@ -67,13 +67,13 @@ public class MachineService {
 
         Machine machine = new Machine(
                 MachineStatusEnum.STOPPED,
-                false,
+                true,
                 Date.from(Instant.now()),
                 machineName,
                 false,
                 user
         );
-        machineRepository.save(machine);
+        machine = machineRepository.save(machine);
 
         return machineMapper.machineToMachineDto(machine);
     }

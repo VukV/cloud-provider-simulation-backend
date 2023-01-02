@@ -16,6 +16,7 @@ public interface MachineRepository extends JpaRepository<Machine, Long> {
             "and (:machineName is null or m.name like %:machineName%) " +
             "and ((:statusList) is null  or m.machineStatus in (:statusList)) " +
             "and (cast(:dateFrom as date) is null or m.createdDate >= :dateFrom) " +
-            "and (cast(:dateTo as date) is null or m.createdDate <= :dateTo)")
+            "and (cast(:dateTo as date) is null or m.createdDate <= :dateTo) " +
+            "and m.active = true ")
     List<Machine> findAllMachines(String email, String machineName, List<MachineStatusEnum> statusList, Date dateFrom, Date dateTo);
 }
