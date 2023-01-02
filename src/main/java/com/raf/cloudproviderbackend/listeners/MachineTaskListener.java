@@ -2,6 +2,7 @@ package com.raf.cloudproviderbackend.listeners;
 
 import com.raf.cloudproviderbackend.dto.machine.MachineQueueDto;
 import com.raf.cloudproviderbackend.exceptions.MachineOccupiedException;
+import com.raf.cloudproviderbackend.mapper.MachineMapper;
 import com.raf.cloudproviderbackend.model.machine.Machine;
 import com.raf.cloudproviderbackend.model.machine.MachineStatusEnum;
 import com.raf.cloudproviderbackend.repository.MachineRepository;
@@ -20,10 +21,12 @@ import java.io.ObjectInputStream;
 public class MachineTaskListener {
 
     private final MachineRepository machineRepository;
+    private final MachineMapper machineMapper;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public MachineTaskListener(MachineRepository machineRepository, SimpMessagingTemplate simpMessagingTemplate) {
+    public MachineTaskListener(MachineRepository machineRepository, MachineMapper machineMapper, SimpMessagingTemplate simpMessagingTemplate) {
         this.machineRepository = machineRepository;
+        this.machineMapper = machineMapper;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -57,15 +60,17 @@ public class MachineTaskListener {
         Machine machine = machineRepository.findByMachineId(machineQueueDto.getMachineId());
         if(machine != null){
             Thread.sleep(10000);
-            machine.setMachineStatus(status);
             try {
-                machine.setActive(true);
+                machine.setMachineStatus(status);
+                machine.setOccupied(false);
+                machineRepository.save(machine);
             }
             catch (ObjectOptimisticLockingFailureException e){
-                throw new MachineOccupiedException();
+                e.printStackTrace();
+                //throw new MachineOccupiedException();
             }
 
-            simpMessagingTemplate.convertAndSend("/topic/" + machineQueueDto.getUserEmail(), machine);
+            simpMessagingTemplate.convertAndSend("/topic/" + machineQueueDto.getUserEmail(), machineMapper.machineToMachineDto(machine));
         }
     }
 
@@ -75,19 +80,21 @@ public class MachineTaskListener {
         if(machine != null){
             Thread.sleep(5000);
             machine.setMachineStatus(MachineStatusEnum.STOPPED);
-            simpMessagingTemplate.convertAndSend("/topic/" + machineQueueDto.getUserEmail(), machine);
+            simpMessagingTemplate.convertAndSend("/topic/" + machineQueueDto.getUserEmail(), machineMapper.machineToMachineDto(machine));
 
             Thread.sleep(5000);
             machine.setMachineStatus(MachineStatusEnum.RUNNING);
 
             try {
-                machine.setActive(true);
+                machine.setOccupied(false);
+                machineRepository.save(machine);
             }
             catch (ObjectOptimisticLockingFailureException e){
-                throw new MachineOccupiedException();
+                e.printStackTrace();
+                //throw new MachineOccupiedException();
             }
 
-            simpMessagingTemplate.convertAndSend("/topic/" + machineQueueDto.getUserEmail(), machine);
+            simpMessagingTemplate.convertAndSend("/topic/" + machineQueueDto.getUserEmail(), machineMapper.machineToMachineDto(machine));
         }
     }
 }

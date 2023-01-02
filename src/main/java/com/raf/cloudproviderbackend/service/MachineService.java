@@ -1,9 +1,6 @@
 package com.raf.cloudproviderbackend.service;
 
-import com.raf.cloudproviderbackend.dto.machine.MachineDto;
-import com.raf.cloudproviderbackend.dto.machine.MachineErrorDto;
-import com.raf.cloudproviderbackend.dto.machine.MachineQueueDto;
-import com.raf.cloudproviderbackend.dto.machine.MachineScheduleDto;
+import com.raf.cloudproviderbackend.dto.machine.*;
 import com.raf.cloudproviderbackend.exceptions.*;
 import com.raf.cloudproviderbackend.mapper.MachineMapper;
 import com.raf.cloudproviderbackend.model.machine.*;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -108,7 +106,6 @@ public class MachineService {
             checkAndSetMachineOccupied(machine);
             checkActionAndStatus(machineAction, machine.getMachineStatus());
 
-            sendToQueue(machineId, machineAction, SecurityContextHolder.getContext().getAuthentication().getName());
             return;
         }
 
@@ -136,20 +133,32 @@ public class MachineService {
     }
 
     @Scheduled(fixedDelay = 30000)
-    @Transactional(dontRollbackOn = {MachineOccupiedException.class, MachineStatusException.class})
     public void executeScheduledTasks(){
-        List<MachineSchedule> scheduleList = machineScheduleRepository.findAllByScheduledDateBeforeAndSentToExecute(Date.from(Instant.now()), false);
-        if(scheduleList.isEmpty()){
+        List<MachineScheduledTaskDto> tasks = getAndCheckTasks();
+        if(tasks == null){
             return;
         }
+        for(MachineScheduledTaskDto task: tasks){
+            sendToQueue(task.getMachineId(), task.getAction(), task.getEmail());
+        }
+    }
+
+    @Transactional(dontRollbackOn = {MachineOccupiedException.class, MachineStatusException.class})
+    public List<MachineScheduledTaskDto> getAndCheckTasks(){
+        List<MachineSchedule> scheduleList = machineScheduleRepository.findAllByScheduledDateBeforeAndSentToExecute(Date.from(Instant.now()), false);
+        if(scheduleList.isEmpty()){
+            return null;
+        }
+
+        List<MachineScheduledTaskDto> tasks = new ArrayList<>();
 
         for(MachineSchedule scheduledTask: scheduleList){
             try {
                 checkAndSetMachineOccupied(scheduledTask.getMachine());
                 checkActionAndStatus(scheduledTask.getAction(), scheduledTask.getMachine().getMachineStatus());
 
-                sendToQueue(scheduledTask.getMachine().getMachineId(), scheduledTask.getAction(), scheduledTask.getMachine().getCreatedBy().getEmail());
                 scheduledTask.setSentToExecute(true);
+                tasks.add(new MachineScheduledTaskDto(scheduledTask.getMachine().getMachineId(), scheduledTask.getAction(), scheduledTask.getMachine().getCreatedBy().getEmail()));
             }
             catch (MachineOccupiedException moe){
                 logError(scheduledTask, "Machine already occupied.");
@@ -158,6 +167,8 @@ public class MachineService {
                 logError(scheduledTask, "Wrong machine action.");
             }
         }
+
+        return tasks;
     }
 
     private void logError(MachineSchedule machineSchedule, String message){
@@ -192,13 +203,14 @@ public class MachineService {
         }
     }
 
-    private void checkAndSetMachineOccupied(Machine machine){
+    public void checkAndSetMachineOccupied(Machine machine){
         if(machine.isOccupied()){
             throw new MachineOccupiedException();
         }
 
         try {
             machine.setOccupied(true);
+            machineRepository.save(machine);
         }
         catch (ObjectOptimisticLockingFailureException e){
             throw new MachineOccupiedException();
@@ -206,7 +218,7 @@ public class MachineService {
 
     }
 
-    private void sendToQueue(Long machineId, MachineActionEnum action, String userEmail){
+    public void sendToQueue(Long machineId, MachineActionEnum action, String userEmail){
         MachineQueueDto machineQueueDto = new MachineQueueDto(machineId, action, userEmail);
         rabbitTemplate.convertAndSend("machineTaskQueue", machineQueueDto);
     }

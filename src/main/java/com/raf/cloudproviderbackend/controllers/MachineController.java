@@ -11,6 +11,7 @@ import com.raf.cloudproviderbackend.security.CheckRole;
 import com.raf.cloudproviderbackend.service.MachineService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,6 +51,7 @@ public class MachineController {
     @CheckRole(roles = RoleEnum.START_MACHINES)
     public ResponseEntity<?> startMachine(@PathVariable Long machineId){
         machineService.handleMachine(machineId, MachineActionEnum.START);
+        machineService.sendToQueue(machineId, MachineActionEnum.START, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
@@ -57,6 +59,7 @@ public class MachineController {
     @CheckRole(roles = RoleEnum.STOP_MACHINES)
     public ResponseEntity<?> stopMachine(@PathVariable Long machineId){
         machineService.handleMachine(machineId, MachineActionEnum.STOP);
+        machineService.sendToQueue(machineId, MachineActionEnum.STOP, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
