@@ -67,6 +67,7 @@ public class MachineController {
     @CheckRole(roles = RoleEnum.RESTART_MACHINES)
     public ResponseEntity<?> restartMachine(@PathVariable Long machineId){
         machineService.handleMachine(machineId, MachineActionEnum.RESTART);
+        machineService.sendToQueue(machineId, MachineActionEnum.RESTART, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
