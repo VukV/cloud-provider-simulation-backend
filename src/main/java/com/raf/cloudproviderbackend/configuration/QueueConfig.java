@@ -19,4 +19,6 @@ public class QueueConfig {
     //          (stop)
     //sudo systemctl enable  rabbitmq-server
     //               (disable)
+
+    //sudo rabbitmq-server
 }
